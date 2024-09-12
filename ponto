@@ -1,0 +1,277 @@
+from selenium import webdriver  # Biblioteca para controle do navegador
+from selenium.webdriver.common.by import By  # Módulo para localizar elementos no DOM
+from selenium.webdriver.support.ui import WebDriverWait  # Classe para gerenciar espera explícita
+from selenium.webdriver.support import expected_conditions as EC  # Condições usadas na espera explícita
+from selenium.webdriver.common.action_chains import ActionChains  # Módulo para executar ações avançadas
+from time import sleep  # Função para adicionar delays
+import tkinter as tk  # Biblioteca para interfaces gráficas (janelas)
+from tkinter import simpledialog  # Módulo para janelas de diálogo simples
+from datetime import datetime # trabalhar com data no python
+
+# Função para solicitar a data por meio de uma janela de diálogo
+def solicitar_data():
+    root = tk.Tk()  # Cria uma instância da janela principal
+    root.withdraw()  # Esconde a janela principal (não queremos exibir uma janela completa)
+    data_atual = datetime.now().strftime("%d/%m/%Y")
+    data = simpledialog.askstring("Entrada de Data", "Por favor, insira a data (ddmmaaaa):", initialvalue=data_atual)  # Abre uma caixa de diálogo para solicitar a data ja com a data atual
+    return data  # Retorna a data inserida pelo usuário
+
+# Solicitar a data do usuário
+data_apontamento = solicitar_data()  # Armazena a data inserida na variável
+
+# Inicializar o WebDriver (Edge)
+navegador = webdriver.Edge()  # Inicia uma nova sessão do navegador Microsoft Edge
+
+try:
+    
+# Maximizar a janela do navegador
+    navegador.maximize_window()  # Maximiza a janela do navegador
+
+# Adicionar um pequeno delay
+    sleep(0.75)  # Espera 0,75 segundos (pequeno delay)
+
+# Abrir a página desejada
+    navegador.get("https://apontamentos.knapplatam.com.br/login")  # Navega para a página de login
+
+# Adicionar um pequeno delay
+    sleep(0.75)  # Espera 0,75 segundos
+
+# Esperar até que o campo de usuário esteja visível e preencher com o nome de usuário
+    campo_usuario = WebDriverWait(navegador, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//*[@id="email"]'))  # Espera até que o campo de e-mail esteja visível
+    )
+    campo_usuario.send_keys('allan.viana@knapp.com')  # Insere o e-mail no campo
+
+# Adicionar um pequeno delay
+    sleep(0.75)  # Espera 0,75 segundos
+
+# Esperar até que o campo de senha esteja visível e preencher com a senha
+    campo_senha = WebDriverWait(navegador, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//*[@id="password"]'))  # Espera até que o campo de senha esteja visível
+    )
+    campo_senha.send_keys('Knapp@202314')  # Insere a senha no campo
+
+# Adicionar um pequeno delay
+    sleep(0.75)  # Espera 0,75 segundos
+
+# Localizar o botão de login pelo XPath e clicar
+    botao_login = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/main/div/form/div[3]/div/button'))  # Espera até que o botão de login esteja clicável
+    )
+    botao_login.click()  # Clica no botão de login
+
+# Adicionar um pequeno delay
+    sleep(0.75)  # Espera 0,75 segundos
+
+# Localizar o botão de lançamentos de hora
+    botao_lancamentos = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="navbarCollapse"]/ul/li[1]/a'))  # Espera até que o botão de lançamentos esteja clicável
+    )
+    botao_lancamentos.click()  # Clica no botão de lançamentos
+
+# Adicionar um pequeno delay
+    sleep(0.75)  # Espera 0,75 segundos
+
+# Localizar o botão de lançamentos de hora na seção de apontamento
+    botao_apontamento = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="form-apontamento"]/div[1]/div'))  # Espera até que o botão de apontamento esteja clicável
+    )
+    botao_apontamento.click()  # Clica no botão de apontamento
+    sleep(0.75)
+# Esperar até que o campo de data esteja visível e preencher com a data inserida
+    campo_data = WebDriverWait(navegador, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//*[@id="datLct"]'))  # Espera até que o campo de data esteja visível
+    )
+    campo_data.send_keys(data_apontamento)  # Insere a data fornecida pelo usuário no campo de data
+    sleep(0.75)
+
+ # Localizar o botão de especialidades
+    botao_especialidades = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="form-apontamento"]/div[2]/div/select'))  # Espera até que o botão de especialidade
+    )
+    
+    botao_especialidades.click()  # Clica no botão de apontamento
+    
+ # Localizar a especialidade on site
+    botao_onsite = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="form-apontamento"]/div[2]/div/select/option[1]'))  # Espera até que o botão de on site
+    )
+    
+    botao_onsite.click()  # Clica no botão de apontamento
+    sleep(0.75)
+
+# Localizar a especialidade on site
+    botao_onsite = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="form-apontamento"]/div[2]/div/select/option[2]'))  # Espera até que o botão 
+    )
+    
+    botao_onsite.click()  # Clica no botão de apontamento
+    sleep(0.75)
+
+# Escreva a hora inicial
+    campo_senha = WebDriverWait(navegador, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//*[@id="form-apontamento"]/div[3]/div[1]/input'))  # Espera até que o campo seja escrito
+    )
+    campo_senha.send_keys('08:00')  # Insere a senha no campo
+
+ # Escreva a hora saida  para almoço
+    campo_senha = WebDriverWait(navegador, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//*[@id="horFim1"]'))  # Espera até que o campo de senha esteja visível
+    )
+    campo_senha.send_keys('11:30')  # Insere a senha no campo
+
+
+# Localizar a tarefa
+    botao_tarefa = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="codTar1"]'))  # Espera até que o botão de especialidade
+    )
+    
+    botao_tarefa.click()  # Clica no botão de apontamento
+    sleep(0.75)
+
+
+# Localizar a suporte cliente
+    botao_suporte = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="codTar1"]/option[7]'))  # Espera até que o botão de especialidade
+    )
+    
+    botao_suporte.click()  # Clica no botão de apontamento
+    sleep(0.75)
+
+# Localizar a suporte cliente
+    botao_suporte = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="codTar1"]'))  # Espera até que o botão de especialidade
+    )
+    
+    botao_suporte.click()  # Clica no botão de apontamento
+    sleep(0.75)
+
+
+ # Localizar o elemento onde deseja clicar com o botão direito do mouse
+    elemento_direito = WebDriverWait(navegador, 10).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="form-apontamento"]'))
+    )
+  
+    # Usar ActionChains para realizar o clique com o botão direito
+    acao = ActionChains(navegador)
+    acao.click(elemento_direito).perform()
+
+# Escreva a hora do almoço inicial
+    campo_hora_almoco_inicial = WebDriverWait(navegador, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//*[@id="linha_2"]/div[1]/input'))  # Espera até que o campo de senha esteja visível
+    )
+    campo_hora_almoco_inicial.send_keys('11:30')  # Insere a senha no campo
+    sleep(0.75)
+    
+# Escreva a hora do almoço inicial
+    campo_hora_almoco_inicial = WebDriverWait(navegador, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//*[@id="linha_2"]/div[1]/input'))  # Espera até que o campo almoço
+    )
+    campo_hora_almoco_inicial.send_keys('11:30')  # Insere a senha no campo
+
+    
+# Escreva a hora do almoço inicial
+    campo_hora_almoco_inicial = WebDriverWait(navegador, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//*[@id="horFim2"]'))  # Espera até que o campo almoço
+    )
+    campo_hora_almoco_inicial.send_keys('12:30')  # Insere a senha no campo
+
+
+# Localizar a tarefa 2
+    botao_tarefa2 = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="codTar2"]'))  # Espera até que o botão de tarefa 2
+    )
+    
+    botao_tarefa.click()  # Clica no botão de apontamento
+    sleep(0.75)
+
+
+# Localizar a tarefa 2 Pausa almoço
+    botao_pausa = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="codTar2"]/option[6]'))  # Espera até que o botão de especialidade
+    )
+    
+    botao_pausa.click()  # Clica no botão de apontamento
+    sleep(0.75)
+
+
+ # Localizar a tarefa 3
+    elemento_direito = WebDriverWait(navegador, 10).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="form-apontamento"]'))
+    )
+  
+# Usar ActionChains para realizar o clique com o botão direito
+    acao = ActionChains(navegador)
+    acao.click(elemento_direito).perform()
+
+
+# Escreva a hora do almoço final
+    campo_hora_almoco_inicial = WebDriverWait(navegador, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//*[@id="linha_3"]/div[1]/input'))  # Espera até que o campo de senha esteja visível
+    )
+    campo_hora_almoco_inicial.send_keys('12:30')  # Insere a senha no campo
+
+    sleep(0.75)
+
+# Escreva a hora saida
+    campo_hora_almoco_inicial = WebDriverWait(navegador, 10).until(
+        EC.visibility_of_element_located((By.XPATH, '//*[@id="horFim3"]'))  # Espera até que o campo de senha esteja visível
+    )
+    campo_hora_almoco_inicial.send_keys('17:30')  # Insere a senha no campo
+
+    sleep(0.75)
+
+# Localizar a tarefa 3 
+    botao_pausa = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="codTar3"]'))  # Espera até que o botão de especialidade
+    )
+    
+    botao_pausa.click()  # Clica no botão de apontamento
+    sleep(0.75)
+
+
+# Localizar a tarefa 3 
+    botao_pausa = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="codTar3"]/option[7]'))  # Espera até que o botão de especialidade
+    )
+    
+    botao_pausa.click()  # Clica no botão de apontamento
+    sleep(0.75)
+
+
+# Localizar centro d custo
+    botao_centro = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="codCcu"]/div/select'))  # Espera até que o botão de especialidade
+    )
+    
+    botao_centro.click()  # Clica no botão de apontamento
+    sleep(0.75)
+
+# Localizar centro d custo boticario
+    botao_boticario = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="codCcu"]/div/select/option[3]'))  # Espera até que o botão de especialidade
+    )
+    
+    botao_boticario.click()  # Clica no botão de apontamento
+    sleep(0.75)
+
+# Localizar o botão lançar
+    botao_lancar = WebDriverWait(navegador, 10).until(
+        EC.element_to_be_clickable((By.XPATH, '//*[@id="form-apontamento"]/button'))  # Espera até que o botão de especialidade
+    )
+    
+    botao_lancar.click()  # Clica no botão de apontamento
+    sleep(0.75)
+
+
+
+# Adicionar um delay para observar o resultado antes de fechar o navegador
+    sleep(10)  # Espera 5 segundos antes de fechar o navegador para visualizar as mudanças
+
+
+
+
+finally:
+# Fechar o navegador
+    navegador.quit()  # Fecha o navegador, independentemente de erro ou sucesso
+
